@@ -1,0 +1,114 @@
+<!-- weather-app.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weather App</title>
+  <style>
+    /* Add your CSS styles here */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    
+   .container {
+      max-width: 400px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+   .weather-data {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+   .weather-icon {
+      font-size: 48px;
+    }
+    
+   .temperature {
+      font-size: 36px;
+      font-weight: bold;
+    }
+    
+   .location {
+      font-size: 24px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Weather App</h1>
+    <form>
+      <input type="text" id="city" placeholder="Enter city name" />
+      <button id="search-btn">Search</button>
+    </form>
+    <div class="weather-data">
+      <i class="weather-icon" id="weather-icon"></i>
+      <span class="temperature" id="temperature"></span>
+      <span class="location" id="location"></span>
+    </div>
+  </div>
+  
+  <script>
+    const apiKey = 'YOUR_API_KEY';
+    const searchBtn = document.getElementById('search-btn');
+    const cityInput = document.getElementById('city');
+    const weatherIcon = document.getElementById('weather-icon');
+    const temperature = document.getElementById('temperature');
+    const locationElement = document.getElementById('location');
+    
+    searchBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const city = cityInput.value.trim();
+      if (city) {
+        fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`)
+         .then(response => response.json())
+         .then(data => {
+            const weatherData = data.weather[0];
+            weatherIcon.className = `wi wi-${weatherData.icon}`;
+            temperature.textContent = `${Math.round(data.main.temp - 273.15)}°C`;
+            locationElement.textContent = data.name;
+          })
+         .catch(error => console.error(error));
+      }
+    });
+  </script>
+</body>
+</html>
+<!-- weather-app.html -->
+<!--... (rest of the HTML code remains the same) -->
+
+<script>
+  const apiKey = 'YOUR_API_KEY';
+  const searchBtn = document.getElementById('search-btn');
+  const cityInput = document.getElementById('city');
+  const weatherIcon = document.getElementById('weather-icon');
+  const temperature = document.getElementById('temperature');
+  const locationElement = document.getElementById('location');
+  const errorElement = document.getElementById('error');
+
+  searchBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    const city = cityInput.value.trim();
+    if (city) {
+      fetchWeatherData(city)
+       .then(displayWeatherData)
+       .catch(displayError);
+    }
+  });
+
+  function fetchWeatherData(city) {
+    return fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`)
+     .then(response => response.json());
+  }
+
+  function displayWeatherData(data) {
+    const weatherData = data.weather[0];
+    weatherIcon.className =
